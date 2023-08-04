@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import video from './components/videos/PodcastPonderings.mp4';
+import './App.css';
+import NavBar from './components/Nav';
+import Show from './components/Preview';
+import SinglePodcastPreview from './components/Netlify';
+//import podcastGallery from './components/podcastGallery';
+// import BasicButtonGroup from './components/header';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedPodcastId, setSelectedPodcastId] = React.useState(null);
+  const [showShowComponent, setShowShowComponent] = React.useState(true);
+
+  const handlePodcastClick = (podcastId) => {
+    setSelectedPodcastId(podcastId);
+    setShowShowComponent(false);
+  };
+
+  const navigateToHomePage = () => {
+
+    setShowShowComponent(true);
+    alert('You have successfully navigated to the homepage!');
+    window.location.href = "http://localhost:5175/";
+  };
+
+  // const podcastGallery = [
+  //   { id: 1, image: "url_to_image_1.jpg" },
+  //   { id: 2, image: "url_to_image_2.jpg" },
+  //   { id: 3, image: "url_to_image_3.jpg" },
+  //   // Add more podcast objects as needed
+  // ];
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <NavBar handleHomeButtonClick={navigateToHomePage} />
+      <video src={video} autoPlay muted loop id="video-background" />
+      {showShowComponent ? (
+        <Show onPodcastClick={handlePodcastClick} />
+      ) : selectedPodcastId ? (
+        <SinglePodcastPreview podcastId={selectedPodcastId} />
+      ) : (
+        <div>Home</div>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
